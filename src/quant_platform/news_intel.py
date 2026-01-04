@@ -456,3 +456,5 @@ class NewsIntelEngine:
             "confidence_band": [asdict(c) for c in confidence_band],
             "impact_probabilities": [asdict(p) for p in impact_probs],
         }
+
+# News intelligence: NLP pipeline for sentiment extraction and entity recognition
