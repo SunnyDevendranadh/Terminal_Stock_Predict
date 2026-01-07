@@ -492,3 +492,5 @@ class PlatformService:
 
 def _safe_confidence_floor(value: float) -> float:
     return max(0.0, min(0.95, value))
+
+# PlatformService: central orchestrator wiring together audit, alerts, market data, and ML
