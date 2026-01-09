@@ -89,3 +89,5 @@ def _default_residency_map(primary: str, backup: str) -> dict[str, str]:
 def load_config() -> AppConfig:
     return AppConfig()
 
+
+# Config layers: env vars -> YAML file -> defaults, with validation on load
