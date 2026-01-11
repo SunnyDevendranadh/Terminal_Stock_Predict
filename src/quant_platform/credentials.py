@@ -86,3 +86,5 @@ class CredentialManager:
             }
         return providers
 
+
+# Credential rotation: active/standby slots with overlap window and validation
