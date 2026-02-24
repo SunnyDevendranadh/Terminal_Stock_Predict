@@ -1,3 +1,16 @@
+"""
+Automated canary gate for model drift detection.
+
+Implements Mann-Whitney U test on prediction distributions, calibration-delta
+monitoring, and risk-band shift detection. Outcomes trigger pass / extend /
+rollback+incident actions based on configurable thresholds.
+
+Thresholds:
+    - alpha (0.01)           — significance level for Mann-Whitney U
+    - fail_calibration_delta  — calibration drift that triggers rollback
+    - fail_risk_shift         — risk-band shift that triggers rollback
+"""
+
 from __future__ import annotations
 
 import math
