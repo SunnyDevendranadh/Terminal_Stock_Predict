@@ -31,3 +31,5 @@ class AlertRouter:
             channel="encrypted_email_fallback",
             detail=f"{datetime.now(tz=UTC).isoformat()}::{severity}::{message}",
         )
+
+# Alert routing: primary channel (Matrix webhook), fallback (encrypted email)
