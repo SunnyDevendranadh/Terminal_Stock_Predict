@@ -233,3 +233,5 @@ class AuditStore:
     def close(self) -> None:
         self._conn.close()
 
+
+# Audit chain: each event includes hash of previous event for tamper detection
