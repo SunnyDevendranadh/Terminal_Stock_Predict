@@ -1,0 +1,23 @@
+[Unit]
+Description=Quant Research Platform API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=quant
+Group=quant
+WorkingDirectory=/opt/quant-platform
+EnvironmentFile=/etc/quant-platform/quant-platform.env
+ExecStart=/opt/quant-platform/deploy/scripts/start_server.sh
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/quant-platform
+
+[Install]
+WantedBy=multi-user.target

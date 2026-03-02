@@ -1,0 +1,355 @@
+syntax = "proto3";
+
+package quant.v1;
+
+service PredictionGateway {
+  rpc Predict(PredictRequest) returns (PredictResponse);
+  rpc GetOpsStatus(OpsStatusRequest) returns (OpsStatusResponse);
+  rpc SetKillSwitch(KillSwitchRequest) returns (KillSwitchResponse);
+  rpc SubscribeSignals(SignalSubscriptionRequest) returns (stream SignalSnapshot);
+  rpc GetFocusBundle(FocusBundleRequest) returns (FocusBundleResponse);
+  rpc GetNewsIntelBoard(NewsIntelBoardRequest) returns (NewsIntelBoardResponse);
+  rpc GetEventIntel(EventIntelRequest) returns (EventIntelResponse);
+  rpc GetEventImpact(EventImpactRequest) returns (EventImpactResponse);
+  rpc SubscribeEventAlerts(EventAlertSubscriptionRequest) returns (stream EventAlert);
+  rpc GetMlDecisionSupport(MlDecisionSupportRequest) returns (MlDecisionSupportResponse);
+  rpc GetMlCalibrationStatus(MlCalibrationStatusRequest) returns (MlCalibrationStatusResponse);
+}
+
+message PredictRequest {
+  map<string, double> features = 1;
+  string model_version = 2;
+  string actor = 3;
+}
+
+message PredictResponse {
+  double score = 1;
+  string model_version = 2;
+  string disclaimer_hash = 3;
+  string prediction_signature = 4;
+  string jurisdiction_restriction = 5;
+  bool kill_switch_active = 6;
+  string audit_chain_checkpoint = 7;
+  string jurisdiction_primary = 8;
+  string jurisdiction_backup = 9;
+  string feature_contract_status = 10;
+}
+
+message OpsStatusRequest {}
+
+message OpsStatusResponse {
+  bool kill_switch_active = 1;
+  string kill_switch_level = 2;
+  string chain_verification_status = 3;
+  int32 audit_rpo_seconds = 4;
+  string api_quota_status = 5;
+}
+
+message KillSwitchRequest {
+  string action = 1;
+  string reason = 2;
+  string reason_signature = 3;
+  repeated string approvers = 4;
+  string actor = 5;
+  string role = 6;
+  string mfa_token = 7;
+}
+
+message KillSwitchResponse {
+  string level = 1;
+  string updated_at = 2;
+  string reason = 3;
+}
+
+message SignalSubscriptionRequest {
+  repeated string symbols = 1;
+  int32 refresh_seconds = 2;
+  string actor = 3;
+  string model_version = 4;
+}
+
+message FeatureContribution {
+  string name = 1;
+  double score = 2;
+}
+
+message SignalPoint {
+  string symbol = 1;
+  int32 alpha_score = 2;
+  double raw_score = 3;
+  string model_version = 4;
+  string model_provenance = 5;
+  string feature_contract_status = 6;
+  string audit_hash = 7;
+  double bucket_1_5d = 8;
+  double bucket_20_60d = 9;
+  repeated FeatureContribution feature_contributions = 10;
+  double price             = 11;
+  double price_change_pct  = 12;
+}
+
+message ThreatSnapshot {
+  bool kill_switch_active = 1;
+  string kill_switch_level = 2;
+  string chain_verification_status = 3;
+  int32 audit_rpo_seconds = 4;
+  string api_quota_status = 5;
+}
+
+message NewsItem {
+  string headline     = 1;
+  string source       = 2;
+  string url          = 3;
+  string published_at = 4;
+  string symbol       = 5;
+  string sentiment    = 6;
+}
+
+message SignalSnapshot {
+  string captured_at = 1;
+  repeated SignalPoint signals = 2;
+  ThreatSnapshot threat = 3;
+  repeated NewsItem news = 4;
+}
+
+message PricePoint {
+  string ts     = 1;
+  double price  = 2;
+  double volume = 3;
+}
+
+message Candle {
+  string ts     = 1;
+  double open   = 2;
+  double high   = 3;
+  double low    = 4;
+  double close  = 5;
+  double volume = 6;
+}
+
+message NewsDigestItem {
+  string headline               = 1;
+  string source                 = 2;
+  string url                    = 3;
+  string published_at           = 4;
+  string symbol                 = 5;
+  string sentiment              = 6;
+  string summary                = 7;
+  string why_it_matters         = 8;
+  repeated string glossary_terms = 9;
+}
+
+message FocusBundleRequest {
+  string symbol    = 1;
+  string timeframe = 2;
+  string actor     = 3;
+}
+
+message FocusBundleResponse {
+  string symbol                     = 1;
+  string timeframe                  = 2;
+  repeated PricePoint line_series   = 3;
+  repeated Candle candles           = 4;
+  repeated NewsDigestItem digest    = 5;
+  string trend_label                = 6;
+  double change_pct                 = 7;
+  string captured_at                = 8;
+  repeated EventMarker event_markers = 9;
+  repeated ConfidenceBandPoint confidence_band = 10;
+  repeated ImpactProbability impact_probabilities = 11;
+}
+
+message EventMarker {
+  string event_id = 1;
+  string ts = 2;
+  string severity = 3;
+  string headline = 4;
+}
+
+message ConfidenceBandPoint {
+  string ts = 1;
+  double lower = 2;
+  double upper = 3;
+}
+
+message ImpactProbability {
+  string horizon = 1;
+  double prob_up = 2;
+  double prob_flat = 3;
+  double prob_down = 4;
+}
+
+message EventEvidence {
+  string source = 1;
+  string url = 2;
+  string published_at = 3;
+  string quote = 4;
+  double reliability = 5;
+}
+
+message EventClaim {
+  string claim_id = 1;
+  string event_id = 2;
+  string claim_type = 3;
+  string claim_text = 4;
+  string verification_status = 5;
+  double confidence = 6;
+  repeated EventEvidence evidence = 7;
+}
+
+message EventImpact {
+  string event_id = 1;
+  string horizon = 2;
+  double prob_up = 3;
+  double prob_flat = 4;
+  double prob_down = 5;
+  double expected_return = 6;
+  double downside_risk = 7;
+  double confidence = 8;
+}
+
+message EventTimelineEntry {
+  string event_id = 1;
+  string timestamp = 2;
+  string status = 3;
+  string change_note = 4;
+}
+
+message EventSummary {
+  string event_id = 1;
+  string symbol = 2;
+  string title = 3;
+  string severity = 4;
+  double novelty_score = 5;
+  double contradiction_score = 6;
+  double confidence = 7;
+  string sentiment = 8;
+  string published_at = 9;
+  int32 article_count = 10;
+  bool stale = 11;
+  string why_it_matters = 12;
+}
+
+message NewsIntelBoardRequest {
+  repeated string symbols = 1;
+  string severity = 2;
+  string sentiment = 3;
+  string window = 4;
+  int32 limit = 5;
+  string cursor = 6;
+  string actor = 7;
+}
+
+message NewsIntelBoardResponse {
+  repeated EventSummary events = 1;
+  string next_cursor = 2;
+  int32 count = 3;
+  int32 total = 4;
+  bool stale = 5;
+  string generated_at = 6;
+}
+
+message EventIntelRequest {
+  string event_id = 1;
+  repeated string symbols = 2;
+  string actor = 3;
+}
+
+message EventIntelResponse {
+  EventSummary event = 1;
+  repeated EventClaim claims = 2;
+  repeated EventImpact impacts = 3;
+  repeated EventTimelineEntry timeline = 4;
+  repeated string citations = 5;
+  string what_changed_since_last_update = 6;
+}
+
+message EventImpactRequest {
+  string event_id = 1;
+  repeated string symbols = 2;
+  string actor = 3;
+}
+
+message EventImpactResponse {
+  string event_id = 1;
+  repeated EventImpact impacts = 2;
+  bool stale = 3;
+  string generated_at = 4;
+}
+
+message EventAlertSubscriptionRequest {
+  repeated string symbols = 1;
+  int32 refresh_seconds = 2;
+  string actor = 3;
+  string severity_floor = 4;
+  double confidence_floor = 5;
+  bool contradiction_only = 6;
+}
+
+message EventAlert {
+  EventSummary event = 1;
+  EventImpact impact = 2;
+  string emitted_at = 3;
+  string reason = 4;
+}
+
+message MlRegimeSnapshot {
+  string regime = 1;
+  double momentum = 2;
+  double realized_vol_proxy = 3;
+  double liquidity_proxy = 4;
+}
+
+message MlHorizonDecision {
+  string horizon = 1;
+  double expected_return = 2;
+  double downside_risk = 3;
+  double confidence = 4;
+  double prob_up = 5;
+  double prob_flat = 6;
+  double prob_down = 7;
+  string action_band = 8;
+}
+
+message MlPortfolioRiskAdvisory {
+  string exposure_band = 1;
+  string concentration_risk = 2;
+  string suggested_sizing_band = 3;
+  double max_single_position_pct = 4;
+  bool stop_review_required = 5;
+}
+
+message MlDecisionSupportRequest {
+  string symbol = 1;
+  map<string, double> features = 2;
+  string model_version = 3;
+  double confidence_floor = 4;
+  string actor = 5;
+}
+
+message MlDecisionSupportResponse {
+  string model_version = 1;
+  string model_lineage = 2;
+  string feature_contract_status = 3;
+  double confidence_floor = 4;
+  bool confidence_gated = 5;
+  double calibration_error = 6;
+  double confidence_drift = 7;
+  MlRegimeSnapshot regime = 8;
+  repeated MlHorizonDecision horizons = 9;
+  MlPortfolioRiskAdvisory portfolio_risk_advisory = 10;
+  string generated_at = 11;
+}
+
+message MlCalibrationStatusRequest {
+  string actor = 1;
+}
+
+message MlCalibrationStatusResponse {
+  int32 sample_count = 1;
+  double ece = 2;
+  double brier_score = 3;
+  double hit_rate = 4;
+  double confidence_drift = 5;
+  string updated_at = 6;
+}

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=40"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quant-research-platform"
+version = "0.1.0"
+description = "Decision-support quant platform with institutional controls"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "yfinance>=0.2.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

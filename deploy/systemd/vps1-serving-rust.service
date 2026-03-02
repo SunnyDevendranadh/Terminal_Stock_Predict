@@ -1,0 +1,23 @@
+[Unit]
+Description=VPS1 Rust gRPC Gateway (PredictionGateway)
+After=network-online.target quant-platform.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=quant
+Group=quant
+WorkingDirectory=/opt/quant-platform/rust/vps1-serving
+EnvironmentFile=/etc/quant-platform/vps1-serving-rust.env
+ExecStart=/opt/quant-platform/deploy/scripts/start_rust_gateway.sh
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/quant-platform
+
+[Install]
+WantedBy=multi-user.target

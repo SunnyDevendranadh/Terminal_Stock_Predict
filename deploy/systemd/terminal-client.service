@@ -1,0 +1,15 @@
+[Unit]
+Description=Quant Terminal Client (Ratatui C2)
+After=network-online.target vps1-serving-rust.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/quant-platform
+EnvironmentFile=%h/.config/quant-platform/terminal-client.env
+ExecStart=/opt/quant-platform/rust/terminal-client/target/release/terminal-client
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

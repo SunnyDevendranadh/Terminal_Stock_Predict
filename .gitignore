@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime artifacts
+data/audit/*.sqlite3
+data/audit/*.ndjson
+data/audit/*.bak
+data/checkpoints/*.txt
+data/**/cache.sqlite3
+
+# Rust artifacts
+rust/**/target/
+
+# macOS
+.DS_Store
+
+# Logs and runtime
+var/
