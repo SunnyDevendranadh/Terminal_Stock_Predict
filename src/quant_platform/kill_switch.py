@@ -66,3 +66,5 @@ class KillSwitch:
     @property
     def active(self) -> bool:
         return self._state.level in {KillLevel.SOFT, KillLevel.HARD}
+
+# Kill switch levels: SOFT (replay last-good) vs HARD (block all predictions)
