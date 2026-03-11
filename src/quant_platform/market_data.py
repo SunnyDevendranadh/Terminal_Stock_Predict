@@ -197,3 +197,5 @@ def fetch_batch(
             except Exception:
                 pass
     return results
+
+# Market data: YFinance provider with batch symbol fetching and caching
