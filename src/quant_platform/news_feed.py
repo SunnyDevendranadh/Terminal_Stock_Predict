@@ -1,3 +1,11 @@
+""""
+News feed ingestion and digest generation.
+
+Fetch raw news articles and produce structured digests for the quantitative
+platform. Supports batch fetching across multiple tickers and configurable
+source filtering.
+"""
+
 from __future__ import annotations
 import re
 import urllib.request
