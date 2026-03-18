@@ -451,3 +451,5 @@ class DecisionSupportEngine:
 
     def challenger_status(self) -> dict[str, object]:
         return self._cc.status()
+
+# Decision support: feature importance ranking with confidence intervals
