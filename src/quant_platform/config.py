@@ -88,3 +88,4 @@ def _default_residency_map(primary: str, backup: str) -> dict[str, str]:
 
 def load_config() -> AppConfig:
     return AppConfig()
+
