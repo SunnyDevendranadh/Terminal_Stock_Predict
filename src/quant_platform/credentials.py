@@ -85,3 +85,4 @@ class CredentialManager:
                 "rotation_status": "due" if now >= due_at else "healthy",
             }
         return providers
+
