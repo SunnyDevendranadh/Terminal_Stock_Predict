@@ -232,3 +232,4 @@ class AuditStore:
 
     def close(self) -> None:
         self._conn.close()
+
